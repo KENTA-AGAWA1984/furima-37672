@@ -14,7 +14,7 @@
 | birthday           | date                | null: false               |
 
 ### Association
-* has_many :itemes
+* has_many :items
 * has_many :orders
 
 
@@ -27,8 +27,8 @@
 | category_id                         | integer    | null: false                    |
 | condition_id                        | integer    | null: false                    |
 | postage_type_id                     | integer    | null: false                    |
-| shipping area_id                    | integer    | null: false                    |
-| preparation_days_id                 | integer    | null: false                    |
+| prefecture_id                       | integer    | null: false                    |
+| preparation_day_id                  | integer    | null: false                    |
 | price                               | integer    | null: false                    |
 | user                                | references | null: false, foreign_key: true |
 
@@ -46,7 +46,7 @@
 ### Association
 - belongs_to :user
 - belongs_to :item
-- has_one :addres
+- has_one :address
 
 
 ## addresses table
