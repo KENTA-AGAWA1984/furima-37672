@@ -7,29 +7,59 @@ RSpec.describe Item, type: :model do
 
   describe '商品出品' do
     context '商品出品がうまくいくとき' do
-      it "name、image、introduction、category_idとcondition_idとpostage_type_idとprefecture_idとpreparation_day_idが存在すれば出品できる" do
-        
+      it 'name、image、introduction、category_idとcondition_idとpostage_type_idとprefecture_idとpreparation_day_idが存在すれば出品できる' do
+        expect(@item).to be_valid
       end
-      it "価格が¥300~¥9,999,999がで出品できる" do
-      end
-      it "価格が半角数値のみ出品できる" do
+      it '価格が¥300~¥9,999,999(半角）だと出品できる' do
+        @item.price = '500'
+        expect(@item).to be_valid
       end
     end
-
-    context '新規登録がうまくいかないとき' do
-      it "nicknameが空だと登録できない" do
+    context '商品出品がうまくいかないとき' do
+      it '商品画像が空だと出品できない' do
+        @item.image = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Image can't be blank")
       end
-      it "nicknameが7文字以上であれば登録できない" do
+      it '商品名が空だと出品できない' do
+        @item.name = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Name can't be blank")
       end
-      it "emailが空では登録できない" do
+      it '商品の説明が空だと出品できない' do
+        @item.introduction = ''
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Introduction can't be blank")
       end
-      it "重複したemailが存在する場合登録できない" do
+      it 'カテゴリーの情報が空だと出品できない' do
+        @item.category_id = '1'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Category must be other than 1')
       end
-      it "passwordが空では登録できない" do
+      it ' 商品の状態の情報が空だと出品できない' do
+        @item.condition_id = '1'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Condition must be other than 1')
       end
-      it "passwordが5文字以下であれば登録できない" do
+      it '配送料の負担の情報が空だと出品できない' do
+        @item.postage_type_id = '1'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Postage type must be other than 1')
       end
-      it "passwordが存在してもpassword_confirmationが空では登録できない" do
+      it '発送元の地域の情報が空だと出品できない' do
+        @item.prefecture_id = '1'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Prefecture must be other than 1')
+      end
+      it '発送までの日数の情報が空だと出品できない' do
+        @item.preparation_day_id = '1'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Preparation day must be other than 1')
+      end
+      it '価格の情報が空だと出品できない' do
+        @item.price = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price can't be blank")
       end
     end
   end
