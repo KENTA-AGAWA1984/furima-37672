@@ -7,7 +7,7 @@ class Item < ApplicationRecord
   belongs_to :preparation_day
 
   belongs_to :user
-  has_one :order
+  # has_one :order
   has_one_attached :image
 
   validates :name,               presence: true
@@ -18,6 +18,6 @@ class Item < ApplicationRecord
   validates :prefecture_id,      presence: true, numericality: { other_than: 1 }
   validates :preparation_day_id, presence: true, numericality: { other_than: 1 }
   validates :price,              presence: true, format: { with: /\A[0-9]+\z/ },
-                                 numericality: { greater_than: 300, less_than: 9_999_999 }
+                                 numericality: { only_integer: true, greater_than: 300, less_than: 9_999_999 }
   validates :image,              presence: true
 end

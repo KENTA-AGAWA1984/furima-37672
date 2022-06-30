@@ -61,6 +61,21 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Price can't be blank")
       end
+      it '価格が¥300~¥9,999,999でないと出品できない' do
+        @item.price = '100'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price must be greater than 300')
+      end
+      it '価格がでないと出品できない' do
+        @item.price = '1111.1'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price must be an integer')
+      end
+      it '価格は半角でないと出品できない' do
+        @item.price = '５０００'
+        @item.valid?
+        expect(@item.errors.full_messages).to include('Price is not a number')
+      end
     end
   end
 end
