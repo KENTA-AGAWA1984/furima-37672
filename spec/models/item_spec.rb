@@ -16,6 +16,11 @@ RSpec.describe Item, type: :model do
       end
     end
     context '商品出品がうまくいかないとき' do
+      it 'ユーザーが紐付いていなければ投稿できない' do
+        @item.user = nil
+        @item.valid?
+        expect(@item.errors.full_messages).to include('User must exist')
+      end
       it '商品画像が空だと出品できない' do
         @item.image = nil
         @item.valid?
@@ -64,7 +69,7 @@ RSpec.describe Item, type: :model do
       it '価格が¥300~¥9,999,999でないと出品できない' do
         @item.price = '100'
         @item.valid?
-        expect(@item.errors.full_messages).to include('Price must be greater than 300')
+        expect(@item.errors.full_messages).to include('Price must be greater than or equal to 300')
       end
       it '価格がでないと出品できない' do
         @item.price = '1111.1'
