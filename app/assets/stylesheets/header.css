@@ -102,3 +102,9 @@
   text-decoration: none;
   color: #333333;
 }
+
+.item-lists {
+  display: flex;
+}
+
+
