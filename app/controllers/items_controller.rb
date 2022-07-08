@@ -39,7 +39,7 @@ class ItemsController < ApplicationController
       redirect_to item_path
     else
       render :edit
-    end  
+    end
   end
 
   private
@@ -51,12 +51,9 @@ class ItemsController < ApplicationController
 
   def set_items
     @item = Item.find(params[:id])
-  end  
-
-  def producer_confirmation  
-      unless @item.user_id == current_user.id
-        redirect_to root_path 
-      end
   end
 
+  def producer_confirmation
+    redirect_to root_path unless @item.user_id == current_user.id
+  end
 end
