@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :index]
-  before_action :Producer_confirmation, only: [:edit, :update, :destroy]
+  before_action :set_items,          only: [:show, :edit, :update]
+  before_action :producer_confirmation, only: [:edit, :update, :destroy]
 
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -20,15 +21,12 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    @item = Item.find(params[:id])
   end
 
   def show
-    @item = Item.find(params[:id])
   end
 
   def update
-    @item = Item.find(params[:id])
     if @item.update(item_params)
       redirect_to item_path
     else
@@ -43,8 +41,11 @@ class ItemsController < ApplicationController
                                  :preparation_day_id, :price).merge(user_id: current_user.id)
   end
 
-  def Producer_confirmation
-      @item = Item.find(params[:id])
+  def set_items
+    @item = Item.find(params[:id])
+  end  
+
+  def producer_confirmation  
       unless @item.user_id == current_user.id
         redirect_to root_path 
       end
