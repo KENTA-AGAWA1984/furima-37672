@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :index]
+  before_action :Producer_confirmation, only: [:edit, :update, :destroy]
 
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -41,4 +42,12 @@ class ItemsController < ApplicationController
     params.require(:item).permit(:name, :image, :introduction, :category_id, :condition_id, :postage_type_id, :prefecture_id,
                                  :preparation_day_id, :price).merge(user_id: current_user.id)
   end
+
+  def Producer_confirmation
+      @item = Item.find(params[:id])
+      unless @item.user_id == current_user.id
+        redirect_to root_path 
+      end
+  end
+
 end
