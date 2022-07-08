@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:show, :index]
-  before_action :set_items,          only: [:show, :edit, :update]
-  before_action :producer_confirmation, only: [:edit, :update]
+  before_action :set_items,          only: [:show, :edit, :update, :destroy]
+  before_action :producer_confirmation, only: [:edit, :update, :destroy]
 
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -26,12 +26,20 @@ class ItemsController < ApplicationController
   def show
   end
 
+  def destroy
+    if @item.destroy
+      redirect_to root_path
+    else
+      redirect_to root_path
+    end
+  end
+
   def update
     if @item.update(item_params)
       redirect_to item_path
     else
       render :edit
-    end  
+    end
   end
 
   private
@@ -43,12 +51,9 @@ class ItemsController < ApplicationController
 
   def set_items
     @item = Item.find(params[:id])
-  end  
-
-  def producer_confirmation  
-      unless @item.user_id == current_user.id
-        redirect_to root_path 
-      end
   end
 
+  def producer_confirmation
+    redirect_to root_path unless @item.user_id == current_user.id
+  end
 end
