@@ -9,9 +9,7 @@ class OrderAddress
     validates :prefecture_id, numericality: { other_than: 1 }
     validates :city
     validates :street
-    validates :building
     validates :phone, format: { with: /\A\d{10}$|^\d{11}\z/ }
-    validates :order_id
   end
  
 
