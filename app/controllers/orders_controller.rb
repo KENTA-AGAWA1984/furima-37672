@@ -1,14 +1,13 @@
 class OrdersController < ApplicationController
   before_action :set_item,           only: [:index, :create]
   before_action :redirect_session,   only: [:index, :create]
+  before_action :prevent_url,        only: [:index, :create]
       
   def index
-    prevent_url
     @order_address = OrderAddress.new
   end
 
   def create
-    prevent_url
     @order_address = OrderAddress.new(order_params)
     if @order_address.valid?
       pay_item
@@ -46,6 +45,12 @@ class OrdersController < ApplicationController
 
   def prevent_url
     unless user_signed_in? && (current_user == @item.user)
+      redirect_to root_path
+    end
+  end
+
+  def prevent_url
+    if @item.user_id == current_user.id || @item.order != nil
       redirect_to root_path
     end
   end
