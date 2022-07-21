@@ -1,7 +1,8 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :index]
-  before_action :set_items,          only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!,    except: [:show, :index]
+  before_action :set_items,             only: [:show, :edit, :update, :destroy]
   before_action :producer_confirmation, only: [:edit, :update, :destroy]
+  before_action :prevent_url,           only: [:edit, :update, :destroy]
 
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -56,4 +57,11 @@ class ItemsController < ApplicationController
   def producer_confirmation
     redirect_to root_path unless @item.user_id == current_user.id
   end
+
+  def prevent_url
+    if @item.user_id != current_user.id || @item.order != nil 
+      redirect_to root_path
+    end
+  end
+
 end
